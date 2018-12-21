@@ -1,0 +1,8 @@
+user = mail_admin
+password = mail_admin_password
+hosts = localhost
+dbname = postfix
+table = mailbox
+select_field = quota
+where_field = username
+#additional_conditions = and active = '1'

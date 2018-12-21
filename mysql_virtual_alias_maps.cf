@@ -1,0 +1,9 @@
+user = mail_admin
+password = mail_admin_password
+hosts = localhost
+dbname = postfix
+table = alias
+select_field = goto
+where_field = address
+
+

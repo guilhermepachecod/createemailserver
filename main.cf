@@ -1,0 +1,97 @@
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+# appending .domain is the MUA’s job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate “delayed mail” warnings
+#delay_warning_time = 4h
+
+#MailMan
+owner_request_special = no
+
+#MailMan / TMDA
+recipient_delimiter = +
+
+#Tamanho maximo de 20mb por mensagem
+message_size_limit = 20971520
+
+myhostname = 192.168.1.100
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination = myhostname,localhost,192.168.1.100
+relayhost =
+mynetworks = 127.0.0.0/8, 192.168.1.0/24
+#mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+
+# Mailbox Virtuais
+
+##################
+
+virtual_alias_maps = mysql:/etc/postfix/mysql_virtual_alias_maps.cf
+virtual_mailbox_base = /var/email
+virtual_mailbox_domains = mysql:/etc/postfix/mysql_virtual_domains_maps.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+virtual_minimum_uid = 1001
+virtual_transport = maildrop
+#virtual_transport = virtual
+virtual_uid_maps = static:1001
+virtual_gid_maps = static:1001
+
+# Configuracoes para Habilitar Suporte a Cota
+
+##################
+
+virtual_create_maildirsize = yes
+virtual_mailbox_extended = yes
+virtual_maildir_extended = yes
+virtual_mailbox_limit_maps = mysql:/etc/postfix/mysql_virtual_mailbox_limit_maps.cf
+virtual_mailbox_limit_override = yes
+virtual_maildir_limit_message = Desculpe, este usuario esta com a cota estourada, por favor tente mais tarde.
+virtual_overquota_bounce = yes
+virtual_mailbox_limit = 51200000
+virtual_mailbox_limit_inbox = no
+
+# =======MAILDROP ==========
+fallback_transport = /usr/bin/maildrop
+maildrop_destination_recipient_limit = 1
+unknown_local_recipient_reject_code = 450
+
+# SMTP
+
+##################
+
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_local_domain = $myhostname
+smtpd_sasl_security_options = noanonymous
+broken_sasl_auth_clients = yes
+smtpd_recipient_restrictions =
+permit_mynetworks,
+permit_sasl_authenticated,
+reject_non_fqdn_hostname,
+reject_non_fqdn_sender,
+reject_non_fqdn_recipient,
+reject_unauth_destination,
+reject_unauth_pipelining,
+reject_invalid_hostname,
+reject_unlisted_recipient,
+reject_rbl_client opm.blitzed.org,
+reject_rbl_client list.dsbl.org,
+reject_rbl_client bl.spamcop.net,
+reject_rbl_client sbl-xbl.spamhaus.org,
+reject_rbl_client zombie.dnsbl.sorbs.net
+
+# Verificacoes do SMTP – Obrigacao todos a dar helo e desabilita comando vrfy e etrn
+smtpd_helo_restrictions = reject_invalid_hostname
+smtpd_etrn_restrictions = permit_mynetworks, reject
+smtpd_helo_required = yes
+disable_vrfy_command = yes
+
+smtpd_use_tls = yes
+smtpd_tls_cert_file = /etc/postfix/smtpd.cert
+smtpd_tls_key_file = /etc/postfix/smtpd.key
+
+content_filter = amavis:[127.0.0.1]:10024
+receive_override_options = no_address_mappings

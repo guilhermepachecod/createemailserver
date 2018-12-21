@@ -1,0 +1,16 @@
+MYSQL_UID_FIELD ’5000′
+MYSQL_GID_FIELD ’5000′
+MYSQL_HOME_FIELD “/var/email”
+MYSQL_LOGIN_FIELD username
+MYSQL_MAILDIR_FIELD CONCAT(domain,’/',maildir,’/Maildir/’)
+MYSQL_NAME_FIELD name
+MYSQL_OPT 0
+MYSQL_PASSWORD my_mysql_admin_password
+MYSQL_PORT 0
+MYSQL_QUOTA_FIELD quota
+MYSQL_SERVER localhost
+MYSQL_SOCKET /var/run/mysqld/mysqld.sock
+MYSQL_USERNAME mail_admin
+MYSQL_USER_TABLE mailbox
+MYSQL_CRYPT_PWFIELD password
+MYSQL_DATABASE mail
